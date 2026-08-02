@@ -1,0 +1,478 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PHC Doctor Attendance System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+    --primary:#16a34a;
+    --secondary:#0ea5a4;
+    --accent:#22c55e;
+    --light:#f0fdf4;
+    --card:#ffffff;
+    --text:#052e16;
+    --muted:#4b5563;
+    --shadow:0 18px 45px rgba(0,0,0,0.10);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+    background:linear-gradient(135deg,#ecfdf5,#f0fdfa,#ffffff);
+    color:var(--text);
+    overflow-x:hidden;
+}
+
+/* NAVBAR */
+nav{
+    background:linear-gradient(90deg,#16a34a,#0ea5a4);
+    padding:16px 8%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 10px 30px rgba(0,0,0,0.18);
+}
+
+nav h2{
+    color:#fff;
+    font-weight:800;
+    letter-spacing:1px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+nav h2 i{
+    background:rgba(255,255,255,0.2);
+    padding:10px;
+    border-radius:14px;
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:28px;
+}
+
+nav ul li a{
+    text-decoration:none;
+    color:#eafff1;
+    font-weight:600;
+    transition:.3s;
+}
+nav ul li a:hover{
+    color:#fff;
+    text-shadow:0 0 10px rgba(255,255,255,0.7);
+}
+
+nav .btn{
+    background:#fff;
+    color:var(--primary);
+    padding:10px 22px;
+    border-radius:30px;
+    text-decoration:none;
+    font-weight:700;
+    transition:.3s;
+}
+nav .btn:hover{
+    transform:translateY(-2px);
+    background:var(--light);
+}
+
+/* SECTION TITLE */
+.section-title{
+    text-align:center;
+    margin-bottom:45px;
+}
+.section-title span{
+    display:inline-block;
+    background:linear-gradient(90deg,#dcfce7,#ccfbf1);
+    padding:10px 22px;
+    border-radius:30px;
+    font-weight:700;
+    color:#065f46;
+    box-shadow:0 10px 25px rgba(0,0,0,0.06);
+}
+.section-title h2{
+    margin-top:18px;
+    font-size:36px;
+    font-weight:900;
+    position:relative;
+    display:inline-block;
+}
+.section-title h2:after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-12px;
+    transform:translateX(-50%);
+    width:70%;
+    height:5px;
+    border-radius:10px;
+    background:linear-gradient(90deg,var(--primary),var(--secondary));
+}
+
+/* HERO */
+.hero{
+    padding:85px 8% 60px;
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:55px;
+    align-items:center;
+}
+
+/* LEFT HERO TEXT */
+.hero h1{
+    font-size:48px;
+    font-weight:900;
+    line-height:1.2;
+}
+.hero h1 span{
+    color:var(--primary);
+}
+
+.hero p{
+    margin-top:18px;
+    font-size:17px;
+    color:var(--muted);
+    line-height:1.7;
+}
+
+.hero .badges{
+    margin-top:30px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+}
+.badge{
+    background:linear-gradient(90deg,#dcfce7,#ccfbf1);
+    color:#065f46;
+    padding:10px 18px;
+    border-radius:25px;
+    font-size:14px;
+    font-weight:700;
+    box-shadow:0 10px 20px rgba(0,0,0,0.05);
+}
+
+/* SIDE BOX */
+.info-panel{
+    background:linear-gradient(135deg,rgba(240,253,244,0.95),rgba(204,251,241,0.80));
+    border:1px solid rgba(22,163,74,0.18);
+    border-radius:26px;
+    padding:35px;
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(10px);
+}
+
+.info-panel h3{
+    margin-bottom:20px;
+    color:var(--primary);
+    font-weight:900;
+    font-size:22px;
+}
+
+.info-panel li{
+    list-style:none;
+    margin-bottom:14px;
+    display:flex;
+    gap:12px;
+    color:var(--text);
+    font-weight:600;
+}
+.info-panel i{
+    color:var(--secondary);
+    font-size:18px;
+    margin-top:2px;
+}
+
+/* RIGHT SIDE IMAGE BOX */
+.hero-image{
+    position:relative;
+    border-radius:26px;
+    overflow:hidden;
+    box-shadow:0 25px 60px rgba(0,0,0,0.18);
+    border:1px solid rgba(22,163,74,0.18);
+}
+
+.hero-image img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+    transform:scale(1.02);
+}
+
+.hero-image:after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(135deg,rgba(22,163,74,0.35),rgba(14,165,164,0.25));
+}
+
+/* IMAGE TEXT */
+.hero-image .img-caption{
+    position:absolute;
+    bottom:18px;
+    left:18px;
+    z-index:5;
+    color:#fff;
+    padding:14px 18px;
+    border-radius:18px;
+    background:rgba(0,0,0,0.35);
+    backdrop-filter:blur(10px);
+    font-weight:700;
+    font-size:14px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* ROLES */
+.roles{
+    padding:80px 8%;
+}
+
+.role-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:30px;
+}
+
+.role-card{
+    background:#fff;
+    padding:38px 26px;
+    border-radius:22px;
+    text-align:center;
+    transition:.35s;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    border:1px solid rgba(14,165,164,0.15);
+}
+
+.role-card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 25px 55px rgba(22,163,74,0.22);
+}
+
+.role-card i{
+    font-size:44px;
+    margin-bottom:15px;
+    background:linear-gradient(90deg,var(--primary),var(--secondary));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.role-card h3{margin-bottom:8px;font-weight:900;}
+.role-card p{font-size:14px;color:var(--muted);}
+
+.role-card a{
+    display:inline-block;
+    margin-top:18px;
+    padding:10px 24px;
+    border-radius:30px;
+    text-decoration:none;
+    font-weight:800;
+    font-size:14px;
+    background:linear-gradient(90deg,var(--primary),var(--secondary));
+    color:#fff;
+    transition:.35s;
+}
+.role-card a:hover{transform:scale(1.06);}
+
+/* FEATURES */
+.features{
+    background:linear-gradient(120deg,#ecfdf5,#f0fdfa);
+    padding:85px 8%;
+}
+
+.feature-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:30px;
+    text-align:center;
+}
+
+.feature{
+    background:#fff;
+    padding:34px 26px;
+    border-radius:22px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.06);
+    border:1px solid rgba(22,163,74,0.12);
+    transition:.35s;
+}
+
+.feature:hover{
+    transform:translateY(-8px);
+    box-shadow:0 20px 50px rgba(14,165,164,0.18);
+}
+
+.feature i{
+    font-size:36px;
+    color:var(--secondary);
+    margin-bottom:15px;
+}
+.feature h4{font-size:18px;font-weight:900;margin-bottom:10px;}
+.feature p{font-size:14px;color:var(--muted);line-height:1.6;}
+
+/* FOOTER */
+footer{
+    padding:28px;
+    text-align:center;
+    font-size:14px;
+    color:#eafff1;
+    background:linear-gradient(90deg,var(--primary),var(--secondary));
+    margin-top:30px;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+    .hero{grid-template-columns:1fr;text-align:center;}
+    nav ul{display:none;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+    <h2><i class="fa fa-leaf"></i> PHC-AI</h2>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/login_doc">Doctor</a></li>
+        <li><a href="/login_ddhs">DDHS</a></li>
+        <li><a href="/login_hmo">HMO</a></li>
+    </ul>
+    <a href="/login" class="btn">PHC Admin</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <!-- LEFT -->
+    <div>
+        <h1>
+            <span>AI-Enabled</span> Doctor Attendance<br>
+            Monitoring System for PHCs
+        </h1>
+        <p>
+            A smart attendance solution integrating facial recognition,
+            GPS verification, and real-time monitoring to improve
+            accountability in rural healthcare services.
+        </p>
+
+        <div class="badges">
+            <div class="badge"><i class="fa fa-camera"></i> Face Recognition</div>
+            <div class="badge"><i class="fa fa-location-dot"></i> Geo-Fencing</div>
+            <div class="badge"><i class="fa fa-random"></i> Random Checks</div>
+        </div>
+
+        <br><br>
+
+        <!-- SIDE BOX -->
+        <div class="info-panel">
+            <h3>System Highlights</h3>
+            <ul>
+                <li><i class="fa fa-check-circle"></i> Identity verification</li>
+                <li><i class="fa fa-check-circle"></i> Continuous duty-hour tracking</li>
+                <li><i class="fa fa-check-circle"></i> Automated violation alerts</li>
+                <li><i class="fa fa-check-circle"></i> Tamper-resistant attendance logs</li>
+                <li><i class="fa fa-check-circle"></i> Government-ready reporting</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- RIGHT IMAGE -->
+    <div class="hero-image">
+        <!-- You can change this image URL -->
+        <img src="../static/img/phcbg2.png" alt="Healthcare AI">
+        <div class="img-caption">
+            <i class="fa fa-heartbeat"></i> PHC Doctor Attendance Monitoring
+        </div>
+    </div>
+</section>
+
+<!-- ROLES -->
+<section class="roles">
+    <div class="section-title">
+        <span><i class="fa fa-users"></i> Login Portals</span>
+        <h2>Access Portals</h2>
+    </div>
+
+    <div class="role-grid">
+
+        <div class="role-card">
+            <i class="fa fa-user-md"></i>
+            <h3>Doctor</h3>
+            <p>Attendance & verification</p>
+            <a href="/login_doc">Login</a>
+        </div>
+
+        <div class="role-card">
+            <i class="fa fa-user-cog"></i>
+            <h3>PHC Admin</h3>
+            <p>Manage doctors & reports</p>
+            <a href="/login">Login</a>
+        </div>
+
+        <div class="role-card">
+            <i class="fa fa-building"></i>
+            <h3>DDHS</h3>
+            <p>District monitoring</p>
+            <a href="/login_ddhs">Login</a>
+        </div>
+
+        <div class="role-card">
+            <i class="fa fa-hospital"></i>
+            <h3>HMO</h3>
+            <p>Policy & analytics</p>
+            <a href="/login_hmo">Login</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+    <div class="section-title">
+        <span><i class="fa fa-star"></i> AI Monitoring</span>
+        <h2>Core Features</h2>
+    </div>
+
+    <div class="feature-grid">
+        <div class="feature">
+            <i class="fa fa-camera"></i>
+            <h4>Face Authentication</h4>
+            <p>AI-based doctor identity verification with secure attendance logging.</p>
+        </div>
+        <div class="feature">
+            <i class="fa fa-map-marker-alt"></i>
+            <h4>GPS Validation</h4>
+            <p>Real-time PHC location tracking with geo-fence enforcement.</p>
+        </div>
+        <div class="feature">
+            <i class="fa fa-random"></i>
+            <h4>Random Verification</h4>
+            <p>Unpredictable duty-hour checks to prevent proxy attendance.</p>
+        </div>
+        <div class="feature">
+            <i class="fa fa-bell"></i>
+            <h4>Alerts</h4>
+            <p>Instant notifications for violations and attendance anomalies.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+   AI-Enabled PHC Doctor Attendance System | Rural Healthcare Innovation
+</footer>
+
+</body>
+</html>

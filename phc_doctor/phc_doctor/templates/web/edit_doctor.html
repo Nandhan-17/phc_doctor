@@ -1,0 +1,440 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>PHC Doctor</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="../static/images/favicon.png">
+    <!-- Custom Stylesheet -->
+    <link href="../../static/web/css/style.css" rel="stylesheet">
+
+<script language="javascript">
+function validate()
+{
+	if(document.form1.name.value=="")
+	{
+	alert("Enter the Name");
+	document.form1.name.focus();
+	return false;
+	}
+	
+	if(document.form1.mobile.value=="")
+	{
+	alert("Enter the Mobile No.");
+	document.form1.mobile.focus();
+	return false;
+	}
+	if(isNaN(document.form1.mobile.value))
+	{
+	alert("Invalid Mobile No.");
+	document.form1.mobile.select();
+	return false;
+	}
+	if(document.form1.mobile.value.length!=10)
+	{
+	alert("Mobile No. must be 10 digits!");
+	document.form1.mobile.select();
+	return false;
+	}
+	if(document.form1.email.value=="")
+	{
+	alert("Enter the Email");
+	document.form1.email.focus();
+	return false;
+	}
+	if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(document.form1.email.value))  
+	{
+	
+	}
+	else
+	{
+	alert("Invalid E-mail!");
+	document.form1.email.select();
+	return false;
+	}
+	
+	if(document.form1.district.value=="")
+	{
+	alert("Enter the District");
+	document.form1.district.focus();
+	return false;
+	}
+	
+	if(document.form1.pass.value=="")
+	{
+	alert("Enter the Password");
+	document.form1.pass.focus();
+	return false;
+	}
+	
+	
+return true;
+}
+</script>
+
+</head>
+
+<body>
+
+    <!--*******************
+        Preloader start
+    ********************-->
+    <!--<div id="preloader">
+        <div class="loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
+            </svg>
+        </div>
+    </div>-->
+    <!--*******************
+        Preloader end
+    ********************-->
+
+    
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <div class="nav-header" style="background-color:#009999">
+            <div class="brand-logo">
+                <a href="">
+				<h2 style="color:#FFFFFF">Admin</h2>
+                   <!-- <b class="logo-abbr"><img src="../static/images/logo.png" alt=""> </b>
+                    <span class="logo-compact"><img src="../static/images/logo-compact.png" alt=""></span>
+                    <span class="brand-title">
+                        <img src="../static/images/logo-text.png" alt="">
+                    </span>-->
+                </a>
+            </div>
+        </div>
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+
+        <!--**********************************
+            Header start
+        ***********************************-->
+        <div class="header">    
+            <div class="header-content clearfix">
+                
+                <div class="nav-control">
+                    <div class="hamburger">
+                        <span class="toggle-icon"><i class="icon-menu"></i></span>
+                    </div>
+                </div>
+                <div class="header-left">
+                   <!-- <div class="input-group icons">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
+                        </div>
+                        <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard">
+                        <div class="drop-down   d-md-none">
+							<form action="#">
+								<input type="text" class="form-control" placeholder="Search">
+							</form>
+                        </div>
+                    </div>-->
+                </div>
+                <div class="header-right">
+                    <ul class="clearfix">
+                        
+                       
+                        <li class="icons dropdown">
+                            <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
+                                <span class="activity active"></span>
+                                <img src="../../static/web/images/profile.jpg" height="40" width="40" alt="">
+                            </div>
+                            <div class="drop-down dropdown-profile   dropdown-menu">
+                                <div class="dropdown-content-body">
+                                    <ul>
+                                       
+                                        <li><a href="/logout"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        <div class="nk-sidebar">           
+            <div class="nk-nav-scroll">
+                <ul class="metismenu" id="menu">
+                    
+                   
+					<li>
+                        <a class="has-arrow" href="/admin" aria-expanded="false">
+                            <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
+                        </a>
+                        
+                    </li>
+					
+					<li>
+                        <a class="" href="/add_doctor" aria-expanded="false">
+                            <i class="icon-grid menu-icon"></i><span class="nav-text">Doctor</span>
+                        </a>
+					</li>	
+					<li>
+                        <a class="" href="/add_ddhs" aria-expanded="false">
+                            <i class="icon-grid menu-icon"></i><span class="nav-text">DDHS</span>
+                        </a>
+					</li>	
+					<li>
+                        <a class="" href="/add_hmo" aria-expanded="false">
+                            <i class="icon-grid menu-icon"></i><span class="nav-text">HMO</span>
+                        </a>
+					</li>	
+					
+					<li>
+                        <a class="" href="/logout" aria-expanded="false">
+                           <i class="icon-notebook menu-icon"></i><span class="nav-text">Logout</span>
+                        </a>
+					</li>	
+						
+                  
+                </ul>
+            </div>
+        </div>
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+
+            <div class="row page-titles mx-0">
+                <div class="col p-md-0">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                        
+                    </ol>
+                </div>
+            </div>
+            <!-- row -->
+
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-validation">
+								
+								  <h3>Update Doctor Details</h3>
+		  
+		  
+		   {% if msg=="success" %}
+		 	<span style="color:#009900">Updated..</span>
+			
+			<script>
+//Using setTimeout to execute a function after 5 seconds.
+setTimeout(function () {
+   //Redirect with JavaScript
+   window.location.href= '/add_photo?vid={{vid}}';
+}, 2000);
+</script>
+			
+		  {% endif %}
+								
+								<div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="active-member">
+								
+								<form name="form1" method="post" action="" enctype="multipart/form-data">
+			  
+			  <div class="form-group">
+                <input type="text" name="name" class="form-control" placeholder="Name" value="{{data[1]}}">
+              </div>
+			 
+			  
+			  <div class="form-group">
+                <input type="text" name="mobile" class="form-control" placeholder="Mobile No." maxlength="10" value="{{data[3]}}">
+              </div>
+			  <div class="form-group">
+                <input type="text" name="email" class="form-control" placeholder="Email" value="{{data[4]}}">
+              </div>
+			 
+				 <div class="form-group">
+                <input type="text" name="district" class="form-control" placeholder="District" value="{{data[5]}}">
+              </div>
+			  
+			   <div class="form-group">
+                <select name="phc_id" class="form-control">
+				<option value="">-PHC Hospital-</option>
+            	{% for ps in phos %}
+				<option value="{{ps[4]}}" {% if data[10]==ps[4] %} selected {% endif %}>{{ps[4]}}-{{ps[1]}}-{{ps[2]}}</option>
+				{% endfor %}
+        </select>
+              </div>
+			  <div class="form-group">
+			  	
+                <input type="text" name="specialized" class="form-control" placeholder="Specialized in" value="{{data[6]}}">
+              </div>
+			  <div class="form-group">
+			  	<label>Start Time</label>
+				<div class="row">
+					<div class="col-md-4">
+					<select name="stime" class="form-control">
+					<option value="">-Select-</option>
+					<option {% if data[11]==6 %} selected {% endif %}>6</option>
+					<option {% if data[11]==7 %} selected {% endif %}>7</option>
+					<option {% if data[11]==8 %} selected {% endif %}>8</option>
+					<option {% if data[11]==9 %} selected {% endif %}>9</option>
+					<option {% if data[11]==10 %} selected {% endif %}>10</option>
+					<option {% if data[11]==11 %} selected {% endif %}>11</option>
+					<option {% if data[11]==12 %} selected {% endif %}>12</option>
+					<option {% if data[11]==13 %} selected {% endif %}>13</option>
+					<option {% if data[11]==14 %} selected {% endif %}>14</option>
+					<option {% if data[11]==15 %} selected {% endif %}>15</option>
+					<option {% if data[11]==16 %} selected {% endif %}>16</option>
+					<option {% if data[11]==17 %} selected {% endif %}>17</option>
+					<option {% if data[11]==18 %} selected {% endif %}>18</option>
+					</select>
+					</div>
+						<div class="col-md-4">
+						<select name="smin" class="form-control">
+						<option value="">-Minute-</option>
+						<option {% if data[13]==0 %} selected {% endif %}>0</option>
+						<option {% if data[13]==5 %} selected {% endif %}>5</option>
+						<option {% if data[13]==10 %} selected {% endif %}>10</option>
+						<option {% if data[13]==15 %} selected {% endif %}>15</option>
+						<option {% if data[13]==20 %} selected {% endif %}>20</option>
+						<option {% if data[13]==25 %} selected {% endif %}>25</option>
+						<option {% if data[13]==30 %} selected {% endif %}>30</option>
+						<option {% if data[13]==35 %} selected {% endif %}>35</option>
+						<option {% if data[13]==40 %} selected {% endif %}>40</option>
+						<option {% if data[13]==45 %} selected {% endif %}>45</option>
+						<option {% if data[13]==50 %} selected {% endif %}>50</option>
+						<option {% if data[13]==55 %} selected {% endif %}>55</option>
+						</select>
+						</div>
+					</div>
+              </div>
+			  <div class="form-group">
+			  	<label>End Time</label>
+					<div class="row">
+						<div class="col-md-4">
+						<select name="etime" class="form-control">
+						<option value="">-Select-</option>
+						<option {% if data[12]==9 %} selected {% endif %}>9</option>
+						<option {% if data[12]==10 %} selected {% endif %}>10</option>
+						<option {% if data[12]==11 %} selected {% endif %}>11</option>
+						<option {% if data[12]==12 %} selected {% endif %}>12</option>
+						<option {% if data[12]==13 %} selected {% endif %}>13</option>
+						<option {% if data[12]==14 %} selected {% endif %}>14</option>
+						<option {% if data[12]==15 %} selected {% endif %}>15</option>
+						<option {% if data[12]==16 %} selected {% endif %}>16</option>
+						<option {% if data[12]==17 %} selected {% endif %}>17</option>
+						<option {% if data[12]==18 %} selected {% endif %}>18</option>
+						<option {% if data[12]==19 %} selected {% endif %}>19</option>
+						<option {% if data[12]==20 %} selected {% endif %}>20</option>
+						<option {% if data[12]==21 %} selected {% endif %}>21</option>
+						<option {% if data[12]==22 %} selected {% endif %}>22</option>
+						<option {% if data[12]==23 %} selected {% endif %}>23</option>
+						</select>
+						</div>
+						<div class="col-md-4">
+						<select name="emin" class="form-control">
+						<option value="">-Minute-</option>
+						<option {% if data[14]==0 %} selected {% endif %}>0</option>
+						<option {% if data[14]==5 %} selected {% endif %}>5</option>
+						<option {% if data[14]==10 %} selected {% endif %}>10</option>
+						<option {% if data[14]==15 %} selected {% endif %}>15</option>
+						<option {% if data[14]==20 %} selected {% endif %}>20</option>
+						<option {% if data[14]==25 %} selected {% endif %}>25</option>
+						<option {% if data[14]==30 %} selected {% endif %}>30</option>
+						<option {% if data[14]==35 %} selected {% endif %}>35</option>
+						<option {% if data[14]==40 %} selected {% endif %}>40</option>
+						<option {% if data[14]==45 %} selected {% endif %}>45</option>
+						<option {% if data[14]==50 %} selected {% endif %}>50</option>
+						<option {% if data[14]==55 %} selected {% endif %}>55</option>
+						</select>
+						</div>
+					</div>
+              </div>
+			
+			  <div class="form-group">
+                <input type="password" name="pass" class="form-control" placeholder="Password" value="{{data[8]}}">
+              </div>
+			 <div class="form-group">
+                <input type="submit" name="btn" value="Update" class="btn btn-primary py-3 px-5" style="background-color:#009999" onClick="return validate()">
+              </div>
+			  
+			</form>
+								
+								 
+								  
+								  
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+					
+					
+					
+                </div>
+								
+								
+								
+                                  
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #/ container -->
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+        
+        
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p>PHC Doctor <a href="https://themeforest.net/user/quixlab"></a> </p>
+            </div>
+        </div>
+        <!--**********************************
+            Footer end
+        ***********************************-->
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <script src="../../static/web/plugins/common/common.min.js"></script>
+    <script src="../../static/web/js/custom.min.js"></script>
+    <script src="../../static/web/js/settings.js"></script>
+    <script src="../../static/web/js/gleek.js"></script>
+    <script src="../../static/web/js/styleSwitcher.js"></script>
+
+    <script src="../../static/web/plugins/validation/jquery.validate.min.js"></script>
+    <script src="../../static/web/plugins/validation/jquery.validate-init.js"></script>
+
+</body>
+
+</html>

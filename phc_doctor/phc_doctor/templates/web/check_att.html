@@ -1,0 +1,260 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PHC-AI | Attendance Check</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+  --primary:#16a34a;
+  --secondary:#0ea5a4;
+  --light:#f0fdf4;
+  --text:#052e16;
+  --muted:#64748b;
+  --card:#ffffff;
+  --shadow:0 18px 45px rgba(0,0,0,0.10);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#ecfdf5,#f0fdfa,#ffffff);
+  padding:20px;
+}
+
+/* Card */
+.card{
+  width:min(850px,100%);
+  background:rgba(255,255,255,0.92);
+  border-radius:28px;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(22,163,74,0.18);
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:1fr 0.9fr;
+}
+
+.left{
+  padding:40px 38px;
+}
+
+.right{
+  position:relative;
+  background:linear-gradient(135deg,#16a34a,#0ea5a4);
+  color:#fff;
+  padding:40px 30px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+.brand{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  font-weight:900;
+  font-size:20px;
+  color:var(--primary);
+}
+
+.brand i{
+  width:42px;
+  height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  color:#fff;
+}
+
+h2{
+  margin-top:22px;
+  font-size:30px;
+  font-weight:900;
+  color:var(--text);
+}
+
+p{
+  margin-top:12px;
+  color:var(--muted);
+  line-height:1.7;
+  font-size:15px;
+}
+
+.msg{
+  margin-top:22px;
+  padding:16px 18px;
+  border-radius:18px;
+  border:1px solid rgba(22,163,74,0.18);
+  background:linear-gradient(90deg,#dcfce7,#ccfbf1);
+  color:#065f46;
+  font-weight:800;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+/* Loader */
+.loader{
+  margin-top:30px;
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  border:6px solid rgba(22,163,74,0.18);
+  border-top:6px solid var(--primary);
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg);}
+}
+
+/* Progress bar */
+.progress-wrap{
+  margin-top:22px;
+}
+.progress-text{
+  font-weight:700;
+  font-size:14px;
+  color:var(--muted);
+  margin-bottom:10px;
+}
+.progress{
+  height:10px;
+  width:100%;
+  background:#e5e7eb;
+  border-radius:999px;
+  overflow:hidden;
+}
+.progress .bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  border-radius:999px;
+  transition:width .2s linear;
+}
+
+/* Right panel */
+.right i{
+  font-size:52px;
+  margin-bottom:15px;
+}
+.right h3{
+  font-size:22px;
+  font-weight:900;
+}
+.right p{
+  color:rgba(255,255,255,0.9);
+  margin-top:8px;
+  font-size:14px;
+}
+
+/* Responsive */
+@media(max-width:900px){
+  .card{grid-template-columns:1fr;}
+  .right{order:-1;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <!-- LEFT -->
+  <div class="left">
+    <div class="brand">
+      <i class="fa fa-leaf"></i> PHC-AI
+    </div>
+
+    {% if rst=="1" %}
+      <h2>Random Attendance Check</h2>
+      <p>
+        Random verification is enabled. Please stay ready.
+        You will be redirected to the camera capture page shortly.
+      </p>
+
+      <div class="msg">
+        <i class="fa fa-camera"></i>
+        Random Attendance Verification Started...
+      </div>
+    {% else %}
+      <h2>Attendance Status Checking</h2>
+      <p>
+        Please wait while we verify your attendance and duty-hour tracking.
+        Do not close this page.
+      </p>
+
+      <div class="msg">
+        <i class="fa fa-circle-check"></i>
+        Processing Attendance Verification...
+      </div>
+    {% endif %}
+
+    <div class="loader"></div>
+
+    <div class="progress-wrap">
+      <div class="progress-text" id="progressText">Preparing redirect...</div>
+      <div class="progress">
+        <div class="bar" id="bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    {% if rst=="1" %}
+      <i class="fa fa-user-shield"></i>
+      <h3>Secure Verification</h3>
+      <p>Face + location based validation ensures tamper-proof attendance.</p>
+    {% else %}
+      <i class="fa fa-clipboard-check"></i>
+      <h3>Checking Attendance</h3>
+      <p>Real-time monitoring helps improve accountability in PHCs.</p>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  // Decide redirect time + url based on rst
+  const isRandom = "{{ rst }}" === "1";
+  const redirectUrl = isRandom ? "/doc_capture" : "/check_att";
+  const totalSeconds = isRandom ? 6 : 10;
+
+  // Progress animation
+  let elapsed = 0;
+  const bar = document.getElementById("bar");
+  const progressText = document.getElementById("progressText");
+
+  const timer = setInterval(() => {
+    elapsed++;
+    const percent = Math.min(100, Math.round((elapsed / totalSeconds) * 100));
+    bar.style.width = percent + "%";
+
+    const remaining = Math.max(0, totalSeconds - elapsed);
+    progressText.innerText = "Redirecting in " + remaining + " sec...";
+
+    if (elapsed >= totalSeconds) {
+      clearInterval(timer);
+
+      // If inside iframe for random case -> parent redirect
+      if (isRandom) {
+        window.parent.location.href = redirectUrl;
+      } else {
+        window.location.href = redirectUrl;
+      }
+    }
+  }, 1000);
+</script>
+
+</body>
+</html>

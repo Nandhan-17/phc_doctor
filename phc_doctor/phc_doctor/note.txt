@@ -1,0 +1,9 @@
+ DDHS (Deputy Director of Health Services)
+Full Form: Deputy Director of Health Services
+🔹 DDHS is a senior government health official responsible for overseeing multiple PHCs in a district or region.
+🔹 Reports to the State Health Directorate and implements government health programs.
+
+
+HMS (Hospital Management System)
+Full Form: Hospital Management System
+🔹 HMS is a software system used in PHCs, hospitals, and healthcare facilities for managing patient records, doctor schedules, attendance, and billing.

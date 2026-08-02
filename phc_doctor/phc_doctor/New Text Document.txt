@@ -1,0 +1,9 @@
+ <iframe src="http://iotcloud.co.in/testmail/testmail1.php?message={{mess}}&email1={{email}}&subject=Attendance Info" width="10" height="10" frameborder="0"></iframe>
+
+ <iframe src="http://iotcloud.co.in/testmail/testmail1.php?message={{mess}}&email={{email2}}&subject=subject=Attendance Info" width="10" height="10" frameborder="0"></iframe>
+
+
+ <iframe src="http://iotcloud.co.in/testmail/testmail1.php?message={{mess}}&email={{email3}}&subject=subject=Attendance Info" width="10" height="10" frameborder="0"></iframe>
+ 
+ <iframe src="http://iotcloud.co.in/testsms/sms.php?sms=emr&name=DDHS&mess={{mess}}&mobile={{mobile1}}" width="10" height="10" ></iframe>
+ <iframe src="http://iotcloud.co.in/testsms/sms.php?sms=emr&name=HMO&mess={{mess}}&mobile={{mobile2}}" width="10" height="10" ></iframe>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PHC-AI | Admin Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+  --primary:#16a34a;
+  --secondary:#0ea5a4;
+  --bg:#ecfdf5;
+  --card:#ffffff;
+  --text:#052e16;
+  --muted:#64748b;
+  --border:#e5e7eb;
+  --shadow:0 18px 45px rgba(0,0,0,0.10);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#ecfdf5,#ffffff,#f0fdfa);
+  color:var(--text);
+}
+
+/* NAVBAR */
+nav{
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(12px);
+  padding:16px 8%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:100;
+  border-bottom:1px solid rgba(22,163,74,0.15);
+  box-shadow:0 6px 20px rgba(0,0,0,0.05);
+}
+
+nav h2{
+  color:var(--primary);
+  font-weight:900;
+  margin:0;
+}
+
+nav ul{
+  list-style:none;
+  display:flex;
+  gap:22px;
+  margin:0;
+  padding:0;
+}
+
+nav ul li a{
+  text-decoration:none;
+  color:var(--text);
+  font-weight:600;
+  font-size:14px;
+}
+
+nav ul li a:hover{
+  color:var(--primary);
+}
+
+nav .btn{
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  color:#fff;
+  padding:10px 18px;
+  border-radius:999px;
+  text-decoration:none;
+  font-weight:800;
+  font-size:14px;
+}
+
+/* LOGIN CENTER */
+.center{
+  min-height:calc(100vh - 78px);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:25px 10px;
+}
+
+/* LOGIN CARD */
+.login-card{
+  width:min(520px,100%);
+  background:rgba(255,255,255,0.95);
+  border:1px solid rgba(22,163,74,0.15);
+  border-radius:26px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.login-header{
+  padding:22px 26px;
+  background:linear-gradient(90deg,#dcfce7,#ccfbf1);
+  border-bottom:1px solid rgba(22,163,74,0.12);
+  text-align:center;
+}
+
+.brand{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  font-weight:900;
+  font-size:20px;
+  color:#065f46;
+}
+
+.brand i{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  color:#fff;
+}
+
+.login-header h2{
+  margin-top:10px;
+  font-size:22px;
+  font-weight:900;
+  color:var(--text);
+}
+
+.login-header p{
+  margin-top:6px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.login-body{
+  padding:26px;
+}
+
+.form-group{
+  margin-bottom:16px;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  color:#166534;
+  margin-bottom:6px;
+}
+
+.input-wrap{
+  position:relative;
+}
+
+.input-wrap i{
+  position:absolute;
+  top:50%;
+  left:12px;
+  transform:translateY(-50%);
+  color:#16a34a;
+  font-size:14px;
+}
+
+input{
+  width:100%;
+  padding:12px 12px 12px 38px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  outline:none;
+  font-size:14px;
+  background:#fff;
+}
+
+input:focus{
+  border-color:rgba(22,163,74,0.45);
+  box-shadow:0 0 0 4px rgba(22,163,74,0.12);
+}
+
+.btn-login{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:16px;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  color:#fff;
+  font-weight:800;
+  font-size:15px;
+  cursor:pointer;
+  transition:.25s;
+  margin-top:8px;
+}
+
+.btn-login:hover{
+  transform:translateY(-1px);
+  box-shadow:0 12px 25px rgba(22,163,74,0.25);
+}
+
+.login-footer{
+  padding:18px 26px 22px;
+  text-align:center;
+  border-top:1px solid rgba(22,163,74,0.12);
+}
+
+.login-footer a{
+  text-decoration:none;
+  color:var(--primary);
+  font-weight:700;
+  font-size:13px;
+}
+
+.copy{
+  margin-top:10px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* Responsive menu */
+@media(max-width:800px){
+  nav{padding:14px 5%; flex-wrap:wrap; gap:10px;}
+  nav ul{flex-wrap:wrap; justify-content:center;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <h2>PHC-AI</h2>
+  <ul>
+    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+    <li><a href="/login_doc"><i class="fa fa-user-md"></i> Doctor</a></li>
+    <li><a href="/login_ddhs"><i class="fa fa-building"></i> DDHS</a></li>
+    <li><a href="/login_hmo"><i class="fa fa-hospital"></i> HMO</a></li>
+  </ul>
+  <a href="/login" class="btn"><i class="fa fa-user-cog"></i> PHC Admin</a>
+</nav>
+
+<!-- LOGIN CENTER -->
+<div class="center">
+  <div class="login-card">
+
+    <div class="login-header">
+      <div class="brand">
+        <i class="fa fa-leaf"></i> PHC-AI
+      </div>
+      <h2>Admin Login</h2>
+      <p>Manage doctors, attendance, reports and monitoring</p>
+    </div>
+
+    <div class="login-body">
+      <form method="post" action="">
+        <div class="form-group">
+          <label>Username</label>
+          <div class="input-wrap">
+            <i class="fa fa-user"></i>
+            <input type="text" name="uname" placeholder="Enter username" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-wrap">
+            <i class="fa fa-lock"></i>
+            <input type="password" name="pass" placeholder="Enter password" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-login">
+          <i class="fa fa-right-to-bracket"></i> Login
+        </button>
+      </form>
+    </div>
+
+    <div class="login-footer">
+      <a href="/"><i class="fa fa-arrow-left"></i> Back to Home</a>
+      <div class="copy">PHC-AI Doctor Attendance System</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

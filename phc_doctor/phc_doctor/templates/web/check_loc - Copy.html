@@ -1,0 +1,65 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Untitled Document</title>
+
+<script>
+var x = document.getElementById("demo");
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+    //x.innerHTML = "Latitude: " + position.coords.latitude + 
+    //"<br>Longitude: " + position.coords.longitude;	
+	document.form1.lat.value=position.coords.latitude;
+	document.form1.lon.value=position.coords.longitude;
+	
+}
+</script>
+
+</head>
+
+<body onLoad="getLocation()">
+
+<form name="form1" id="form1" method="post">
+<input type="hidden" name="lat">
+<input type="hidden" name="lon">
+</form>			
+
+{% if status=="Outside hospital" %}
+<h4>Location Status: <span style="color:#FF0000">Outside hospital</span></h4>
+{% else %}
+<h4>Location Status: <span style="color:#009900">Inside hospital</span></h4>
+{% endif %}	
+
+{% if st=="1" %}
+ <iframe src="http://iotcloud.co.in/testmail/testmail1.php?message={{mess}}&email1={{email1}}&subject=Doctor Status" width="10" height="10" frameborder="0"></iframe>
+
+ <iframe src="http://iotcloud.co.in/testmail/testmail1.php?message={{mess}}&email={{email2}}&subject=Doctor Status" width="10" height="10" frameborder="0"></iframe>
+
+
+ <iframe src="http://iotcloud.co.in/testmail/testmail1.php?message={{mess}}&email={{email3}}&subject=Doctor Status" width="10" height="10" frameborder="0"></iframe>
+ 
+ <iframe src="http://iotcloud.co.in/testsms/sms.php?sms=emr&name=DDHS&mess={{mess}}&mobile={{mobile1}}" width="10" height="10" ></iframe>
+ <iframe src="http://iotcloud.co.in/testsms/sms.php?sms=emr&name=HMO&mess={{mess}}&mobile={{mobile2}}" width="10" height="10" ></iframe>
+{% endif %}					
+				
+				
+				
+{% if dst=="1" %}					
+		  <script>
+//Using setTimeout to execute a function after 5 seconds.
+setTimeout(function () {
+   //Redirect with JavaScript
+  document.getElementById("form1").submit(); 
+}, 10000);
+</script>		
+{% endif %}					
+</body>
+</html>

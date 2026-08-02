@@ -1,0 +1,786 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>PHC Doctor</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="../static/images/favicon.png">
+    <!-- Custom Stylesheet -->
+    <link href="../../static/web/css/style.css" rel="stylesheet">
+
+<script language="javascript">
+function validate()
+{
+	if(document.form1.name.value=="")
+	{
+	alert("Enter the Name");
+	document.form1.name.focus();
+	return false;
+	}
+	
+	if(document.form1.mobile.value=="")
+	{
+	alert("Enter the Mobile No.");
+	document.form1.mobile.focus();
+	return false;
+	}
+	if(isNaN(document.form1.mobile.value))
+	{
+	alert("Invalid Mobile No.");
+	document.form1.mobile.select();
+	return false;
+	}
+	if(document.form1.mobile.value.length!=10)
+	{
+	alert("Mobile No. must be 10 digits!");
+	document.form1.mobile.select();
+	return false;
+	}
+	if(document.form1.email.value=="")
+	{
+	alert("Enter the Email");
+	document.form1.email.focus();
+	return false;
+	}
+	if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(document.form1.email.value))  
+	{
+	
+	}
+	else
+	{
+	alert("Invalid E-mail!");
+	document.form1.email.select();
+	return false;
+	}
+	if(document.form1.area.value=="")
+	{
+	alert("Enter the Area");
+	document.form1.area.focus();
+	return false;
+	}
+	if(document.form1.city.value=="")
+	{
+	alert("Enter the City");
+	document.form1.city.focus();
+	return false;
+	}
+	
+	
+return true;
+}
+</script>
+
+ <script type="text/javascript"
+      src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyAzfJHU7mKkVKW9nTVPymNY-0emhlP-0DQ&v=3.21.5a&libraries=drawing&signed_in=true&libraries=places,drawing"></script>
+    <style type="text/css">
+      #map {
+        padding: 0;
+        margin: 0;
+		width:100%;
+        height: 600px;
+      }
+
+      #panel {
+        width: 200px;
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+        float: right;
+        margin: 10px;
+      }
+
+      #color-palette {
+        clear: both;
+      }
+
+      .color-button {
+        width: 14px;
+        height: 14px;
+        font-size: 0;
+        margin: 2px;
+        float: left;
+        cursor: pointer;
+      }
+
+      #delete-button {
+        margin-top: 5px;
+      }
+    </style>
+   <script type="text/javascript">
+      var drawingManager;
+      var selectedShape;
+      var colors = ['#1E90FF', '#FF1493', '#32CD32', '#FF8C00', '#4B0082'];
+      var selectedColor;
+      var colorButtons = {};
+	  var myval="";
+
+      function clearSelection() {
+        if (selectedShape) {
+          if (typeof selectedShape.setEditable == 'function') {
+            selectedShape.setEditable(false);
+          }
+          selectedShape = null;
+        }
+       // curseldiv.innerHTML = "<b>cursel</b>:";
+      }
+
+      function updateCurSelText(shape) {
+        posstr = "" + selectedShape.position;
+        if (typeof selectedShape.position == 'object') {
+          posstr = selectedShape.position.toUrlValue();
+        }
+        pathstr = "" + selectedShape.getPath;
+        if (typeof selectedShape.getPath == 'function') {
+			
+			
+          pathstr = "";
+          for (var i = 0; i < selectedShape.getPath().getLength(); i++) {
+            // .toUrlValue(5) limits number of decimals, default is 6 but can do more
+            pathstr += "new google.maps.LatLng("+selectedShape.getPath().getAt(i).toUrlValue() + "), ";
+          }
+          pathstr += "";
+		  //////
+		   
+		  //////
+        }
+        bndstr = "" + selectedShape.getBounds;
+        cntstr = "" + selectedShape.getBounds;
+        if (typeof selectedShape.getBounds == 'function') {
+          var tmpbounds = selectedShape.getBounds();
+          cntstr = "" + tmpbounds.getCenter().toUrlValue();
+          bndstr = "[NE: " + tmpbounds.getNorthEast().toUrlValue() + " SW: " + tmpbounds.getSouthWest().toUrlValue() + "]";
+        }
+        cntrstr = "" + selectedShape.getCenter;
+        if (typeof selectedShape.getCenter == 'function') {
+          cntrstr = "" + selectedShape.getCenter().toUrlValue();
+        }
+        radstr = "" + selectedShape.getRadius;
+        if (typeof selectedShape.getRadius == 'function') {
+          radstr = "" + selectedShape.getRadius();
+        }
+        //curseldiv.innerHTML = "<b>cursel</b>: " + selectedShape.type + " " + selectedShape + "; <i>pos</i>: " + posstr + " ; <i>path</i>: " + pathstr + " ; <i>bounds</i>: " + bndstr + " ; <i>Cb</i>: " + cntstr + " ; <i>radius</i>: " + radstr + " ; <i>Cr</i>: " + cntrstr ;
+		
+		document.getElementById('info').innerHTML = pathstr;
+      }
+
+      function setSelection(shape, isNotMarker) {
+        clearSelection();
+        selectedShape = shape;
+        if (isNotMarker)
+          shape.setEditable(true);
+        selectColor(shape.get('fillColor') || shape.get('strokeColor'));
+        updateCurSelText(shape);
+      }
+
+      function deleteSelectedShape() {
+        if (selectedShape) {
+          selectedShape.setMap(null);
+        }
+      }
+
+      function selectColor(color) {
+        selectedColor = color;
+        for (var i = 0; i < colors.length; ++i) {
+          var currColor = colors[i];
+          colorButtons[currColor].style.border = currColor == color ? '2px solid #789' : '2px solid #fff';
+        }
+
+        // Retrieves the current options from the drawing manager and replaces the
+        // stroke or fill color as appropriate.
+        var polylineOptions = drawingManager.get('polylineOptions');
+        polylineOptions.strokeColor = color;
+        drawingManager.set('polylineOptions', polylineOptions);
+
+        var rectangleOptions = drawingManager.get('rectangleOptions');
+        rectangleOptions.fillColor = color;
+        drawingManager.set('rectangleOptions', rectangleOptions);
+
+        var circleOptions = drawingManager.get('circleOptions');
+        circleOptions.fillColor = color;
+        drawingManager.set('circleOptions', circleOptions);
+
+        var polygonOptions = drawingManager.get('polygonOptions');
+        polygonOptions.fillColor = color;
+        drawingManager.set('polygonOptions', polygonOptions);
+      }
+
+      function setSelectedShapeColor(color) {
+        if (selectedShape) {
+          if (selectedShape.type == google.maps.drawing.OverlayType.POLYLINE) {
+            selectedShape.set('strokeColor', color);
+          } else {
+            selectedShape.set('fillColor', color);
+          }
+        }
+      }
+
+      function makeColorButton(color) {
+        var button = document.createElement('span');
+        button.className = 'color-button';
+        button.style.backgroundColor = color;
+        google.maps.event.addDomListener(button, 'click', function() {
+          selectColor(color);
+          setSelectedShapeColor(color);
+        });
+
+        return button;
+      }
+
+       function buildColorPalette() {
+         var colorPalette = document.getElementById('color-palette');
+         for (var i = 0; i < colors.length; ++i) {
+           var currColor = colors[i];
+           var colorButton = makeColorButton(currColor);
+           colorPalette.appendChild(colorButton);
+           colorButtons[currColor] = colorButton;
+         }
+         selectColor(colors[0]);
+       }
+
+		////////
+	
+      /////////////////////////////////////
+      var map; //= new google.maps.Map(document.getElementById('map'), {
+      // these must have global refs too!:
+      var placeMarkers = [];
+      var input;
+      var searchBox;
+      var curposdiv;
+      var curseldiv;
+
+      function deletePlacesSearchResults() {
+        for (var i = 0, marker; marker = placeMarkers[i]; i++) {
+          marker.setMap(null);
+        }
+        placeMarkers = [];
+        input.value = ''; // clear the box too
+      }
+
+      ////////////////////////////SATELLITE/////////ROADMAP
+	  ////////22.338,114.057
+	 
+      function initialize() {
+	  	
+	  	
+        map = new google.maps.Map(document.getElementById('map'), { //var
+          zoom: 12,//10,
+		  
+          center: 
+		  
+		   new google.maps.LatLng(10.836332,78.689346),
+		  
+		  // new google.maps.LatLng(10.836332,78.689346),//(22.344, 114.048),
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          disableDefaultUI: false,
+          zoomControl: true
+		  
+		  
+		  //////////////////
+		  
+        });
+		
+		///////
+		
+		/////
+		
+		
+        curposdiv = document.getElementById('curpos');
+        curseldiv = document.getElementById('cursel');
+
+//10.86533,78.644354, 10.883874,78.696195, 10.851168,78.697912, 10.802947,78.65534, 10.839704,78.599722,
+//new google.maps.LatLng(10.86533,78.644354), new google.maps.LatLng(10.883874,78.696195), new google.maps.LatLng(10.851168,78.697912),
+//new google.maps.LatLng(10.802947,78.65534),new google.maps.LatLng(10.839704,78.599722),
+//////////////#############################
+	
+	
+	
+var triangleCoords = [
+	
+		
+		{{view[5]}}
+	
+  ];
+  myPolygon = new google.maps.Polygon({
+    paths: triangleCoords,
+    draggable: true, // turn off if it gets annoying
+    editable: true,
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#FF0000',
+    fillOpacity: 0.35
+  });
+
+  myPolygon.setMap(map);
+  //google.maps.event.addListener(myPolygon, "dragend", getPolygonCoords);
+  google.maps.event.addListener(myPolygon.getPath(), "insert_at", getPolygonCoords);
+  //google.maps.event.addListener(myPolygon.getPath(), "remove_at", getPolygonCoords);
+  google.maps.event.addListener(myPolygon.getPath(), "set_at", getPolygonCoords);
+
+	
+  
+  ////////////////////////////#########################
+        var polyOptions = {
+			
+          strokeWeight: 0,
+          fillOpacity: 0.45,
+          editable: true
+        };
+		
+		
+        // Creates a drawing manager attached to the map that allows the user to draw
+        // markers, lines, and shapes.
+        drawingManager = new google.maps.drawing.DrawingManager({
+          drawingMode: google.maps.drawing.OverlayType.POLYGON,
+          markerOptions: {
+            draggable: true,
+            editable: true,
+          },
+          polylineOptions: {
+		  
+            editable: true
+          },
+		  
+          rectangleOptions: polyOptions,
+          circleOptions: polyOptions,
+          polygonOptions: polyOptions,
+		  
+          map: map,
+        });
+
+        google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
+          //~ if (e.type != google.maps.drawing.OverlayType.MARKER) {
+            var isNotMarker = (e.type != google.maps.drawing.OverlayType.MARKER);
+            // Switch back to non-drawing mode after drawing a shape.
+            drawingManager.setDrawingMode(null);
+
+            // Add an event listener that selects the newly-drawn shape when the user
+            // mouses down on it.
+            var newShape = e.overlay;
+            newShape.type = e.type;
+            google.maps.event.addListener(newShape, 'click', function() {
+              setSelection(newShape, isNotMarker);
+            });
+            google.maps.event.addListener(newShape, 'drag', function() {
+              updateCurSelText(newShape);
+            });
+            google.maps.event.addListener(newShape, 'dragend', function() {
+              updateCurSelText(newShape);
+            });
+            setSelection(newShape, isNotMarker);
+          //~ }// end if
+        });
+
+        // Clear the current selection when the drawing mode is changed, or when the
+        // map is clicked.
+        google.maps.event.addListener(drawingManager, 'drawingmode_changed', clearSelection);
+        google.maps.event.addListener(map, 'click', clearSelection);
+        google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', deleteSelectedShape);
+
+        buildColorPalette();
+		
+        //~ initSearch();
+        // Create the search box and link it to the UI element.
+         input = /** @type {HTMLInputElement} */( //var
+            document.getElementById('pac-input'));
+        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
+        //
+        var DelPlcButDiv = document.createElement('div');
+        //~ DelPlcButDiv.style.color = 'rgb(25,25,25)'; // no effect?
+        DelPlcButDiv.style.backgroundColor = '#fff';
+        DelPlcButDiv.style.cursor = 'pointer';
+        DelPlcButDiv.innerHTML = 'DEL';
+        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(DelPlcButDiv);
+        google.maps.event.addDomListener(DelPlcButDiv, 'click', deletePlacesSearchResults);
+
+        searchBox = new google.maps.places.SearchBox( //var
+          /** @type {HTMLInputElement} */(input));
+
+        // Listen for the event fired when the user selects an item from the
+        // pick list. Retrieve the matching places for that item.
+        google.maps.event.addListener(searchBox, 'places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+          for (var i = 0, marker; marker = placeMarkers[i]; i++) {
+            marker.setMap(null);
+          }
+
+          // For each place, get the icon, place name, and location.
+          placeMarkers = [];
+          var bounds = new google.maps.LatLngBounds();
+          for (var i = 0, place; place = places[i]; i++) {
+            var image = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Create a marker for each place.
+			
+            var marker = new google.maps.Marker({
+              map: map,
+              title: place.name,
+              position: place.geometry.location
+            });
+
+            placeMarkers.push(marker);
+
+            bounds.extend(place.geometry.location);
+          }
+
+          map.fitBounds(bounds);
+        });
+
+        // Bias the SearchBox results towards places that are within the bounds of the
+        // current map's viewport.
+        google.maps.event.addListener(map, 'bounds_changed', function() {
+          var bounds = map.getBounds();
+          searchBox.setBounds(bounds);
+          //curposdiv.innerHTML = "<b>curpos</b> Z: " + map.getZoom() + " C: " + map.getCenter().toUrlValue();
+        }); //////////////////////
+      }
+	///set ambulance//////////////////////////////////
+	 /* var image = '../static/images/amb1.png';
+  var myLatLng = new google.maps.LatLng(0.834945,78.706804); //or wherever you want the marker placed
+  var beachMarker = new google.maps.Marker({
+      position: myLatLng,
+      map: map,
+      icon: image
+  });*/
+  	//////////////////
+	
+      /*marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations2[i][1], locations2[i][2]),
+        map: map
+      });
+marker.setIcon('../static/images/amb1.png');
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(0.834945,78.706804);
+          infowindow.open(map, marker);
+        }
+      })(marker));*/
+	  
+	 
+	  ///////////////////////////
+	  
+      google.maps.event.addDomListener(window, 'load', initialize);
+	  
+	  
+	  ///
+
+	//
+
+//Display Coordinates below map
+function getPolygonCoords() {
+  var len = myPolygon.getPath().getLength();
+  var htmlStr = "";
+  for (var i = 0; i < len; i++) {
+    htmlStr += "new google.maps.LatLng(" + myPolygon.getPath().getAt(i).toUrlValue(5) + "), ";
+    //Use this one instead if you want to get rid of the wrap > new google.maps.LatLng(),
+    //htmlStr += "" + myPolygon.getPath().getAt(i).toUrlValue(5);
+	//document.form1.detail.value=htmlStr;
+  }
+  
+  document.getElementById('info').innerHTML = htmlStr;
+  //document.form1.detail.value=htmlStr;
+}
+function copyToClipboard(text) {
+document.form1.detail.value=text;
+  //window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+}   
+	
+    </script>
+</head>
+
+<body onLoad="initialize()">
+
+    <!--*******************
+        Preloader start
+    ********************-->
+    <!--<div id="preloader">
+        <div class="loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
+            </svg>
+        </div>
+    </div>-->
+    <!--*******************
+        Preloader end
+    ********************-->
+
+    
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <div class="nav-header" style="background-color:#009999">
+            <div class="brand-logo">
+                <a href="">
+				<h2 style="color:#FFFFFF">Admin</h2>
+                   <!-- <b class="logo-abbr"><img src="../static/images/logo.png" alt=""> </b>
+                    <span class="logo-compact"><img src="../static/images/logo-compact.png" alt=""></span>
+                    <span class="brand-title">
+                        <img src="../static/images/logo-text.png" alt="">
+                    </span>-->
+                </a>
+            </div>
+        </div>
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+
+        <!--**********************************
+            Header start
+        ***********************************-->
+        <div class="header">    
+            <div class="header-content clearfix">
+                
+                <div class="nav-control">
+                    <div class="hamburger">
+                        <span class="toggle-icon"><i class="icon-menu"></i></span>
+                    </div>
+                </div>
+                <div class="header-left">
+                   <!-- <div class="input-group icons">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
+                        </div>
+                        <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard">
+                        <div class="drop-down   d-md-none">
+							<form action="#">
+								<input type="text" class="form-control" placeholder="Search">
+							</form>
+                        </div>
+                    </div>-->
+                </div>
+                <div class="header-right">
+                    <ul class="clearfix">
+                        
+                       
+                        <li class="icons dropdown">
+                            <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
+                                <span class="activity active"></span>
+                                <img src="../../static/web/images/profile.jpg" height="40" width="40" alt="">
+                            </div>
+                            <div class="drop-down dropdown-profile   dropdown-menu">
+                                <div class="dropdown-content-body">
+                                    <ul>
+                                       
+                                        <li><a href="/logout"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        <div class="nk-sidebar">           
+            <div class="nk-nav-scroll">
+                <ul class="metismenu" id="menu">
+                    
+                   
+					<li>
+                        <a class="has-arrow" href="/admin" aria-expanded="false">
+                            <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
+                        </a>
+                        
+                    </li>
+					
+					<li>
+                        <a class="" href="/add_doctor" aria-expanded="false">
+                            <i class="icon-grid menu-icon"></i><span class="nav-text">Doctor</span>
+                        </a>
+					</li>	
+					<li>
+                        <a class="" href="/add_ddhs" aria-expanded="false">
+                            <i class="icon-grid menu-icon"></i><span class="nav-text">DDHS</span>
+                        </a>
+					</li>	
+					<li>
+                        <a class="" href="/add_hmo" aria-expanded="false">
+                            <i class="icon-grid menu-icon"></i><span class="nav-text">HMS</span>
+                        </a>
+					</li>	
+					
+					<li>
+                        <a class="" href="/logout" aria-expanded="false">
+                           <i class="icon-notebook menu-icon"></i><span class="nav-text">Logout</span>
+                        </a>
+					</li>	
+						
+                  
+                </ul>
+            </div>
+        </div>
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+
+            <div class="row page-titles mx-0">
+                <div class="col p-md-0">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                        
+                    </ol>
+                </div>
+            </div>
+            <!-- row -->
+
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-validation">
+								
+								  <h3>PHC</h3>
+		  <p>PHC Geo Location</p>
+		  
+		   {% if msg=="success" %}
+		 	<span style="color:#009900">PHC Details Added..</span>
+			<script>
+//Using setTimeout to execute a function after 5 seconds.
+setTimeout(function () {
+   //Redirect with JavaScript
+   window.location.href= '/admin';
+}, 2000);
+</script>
+			
+		  {% endif %}
+								
+								<div class="row">
+                   
+					
+					 <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="active-member">
+								
+								 <div id="map">A</div>
+								  
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+					 <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="active-member">
+	
+	 <div id="panel">
+      <div id="color-palette"></div>
+      <div>
+        <button id="delete-button">Delete Selected Shape</button>
+      </div>
+	  
+    <div id="curpos"></div>
+    <div id="cursel"></div>
+	<button id="clipboard-btn" onClick="copyToClipboard(document.getElementById('info').innerHTML)">Copy to Clipboard</button>
+   <!-- <div id="note"><small>Note: markers can be selected, but are not graphically indicated; can be deleted, but cannot have their color changed.</small></div>-->
+	<form name="form1" method="post" action="">
+	<!--<select name="mapview" onChange="mapview()">
+	<option value="1">Road Map</option>
+	<option value="2">Satellite</option>
+	</select>-->
+	<textarea id="info" name="detail" class="form-control" required></textarea>
+	<br>
+	Type Area 
+	<input type="text" name="location" value="{{view[2]}}" class="form-control" required>
+	
+	 <button type="submit" class="btn btn-primary" onClick="return validate()">Add</button>
+	 	<br>
+	<a href="/admin">Go Back</a>	
+		<input id="pac-input" type="hidden" placeholder="Search Box">
+	</form>
+	{% if msg=="ok" %}
+	 <span style="color:#003399">Added...</span>
+	 <script>
+//Using setTimeout to execute a function after 5 seconds.
+setTimeout(function () {
+   //Redirect with JavaScript
+   window.location.href= '/admin';
+}, 3000);
+</script>
+	 
+	 {% endif %}
+	<p></p>
+								  
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+					
+                </div>
+								
+								
+								
+                                  
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #/ container -->
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+        
+        
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p>PHC Doctor <a href="https://themeforest.net/user/quixlab"></a> </p>
+            </div>
+        </div>
+        <!--**********************************
+            Footer end
+        ***********************************-->
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <script src="../../static/web/plugins/common/common.min.js"></script>
+    <script src="../../static/web/js/custom.min.js"></script>
+    <script src="../../static/web/js/settings.js"></script>
+    <script src="../../static/web/js/gleek.js"></script>
+    <script src="../../static/web/js/styleSwitcher.js"></script>
+
+    <script src="../../static/web/plugins/validation/jquery.validate.min.js"></script>
+    <script src="../../static/web/plugins/validation/jquery.validate-init.js"></script>
+
+</body>
+
+</html>
